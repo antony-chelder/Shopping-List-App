@@ -15,21 +15,21 @@ import com.goyapp.shoppingtasklist.utils.TimeManager
 
 class NoteAdapter( private  val listener:Listener,val pref : SharedPreferences) : ListAdapter<NoteItem,NoteAdapter.NoteItemHolder>(itemComparator()) {
 
-    class NoteItemHolder(view: View) :RecyclerView.ViewHolder(view) { // Класс хранит ссылку на разметку, на каждый Item
-        private val binding = NoteListItemBinding.bind(view) // Наш view с разметкой превращается в binding
-        fun setData(noteItem: NoteItem,listener:Listener,pref: SharedPreferences) = with(binding){   // Благодаря этой функции, заполняем элементы в разметке
+    class NoteItemHolder(view: View) :RecyclerView.ViewHolder(view) { 
+        private val binding = NoteListItemBinding.bind(view) 
+        fun setData(noteItem: NoteItem,listener:Listener,pref: SharedPreferences) = with(binding){   
                 tvTitle.text = noteItem.title
-                tvDesc.text =  HtmlManager.getFromHtml(noteItem.desc_content).trim() // Чтобы показало без Html тегов,также убрали пробелы с помощью trim()
+                tvDesc.text =  HtmlManager.getFromHtml(noteItem.desc_content).trim() 
                 tvTime.text = TimeManager.getTimeFormat(noteItem.note_time,pref)
                 imDelete.setOnClickListener {
-                    listener.deleteItem(noteItem.id!!) // Добавили наш listener в адаптер
+                    listener.deleteItem(noteItem.id!!) 
                 }
-               itemView.setOnClickListener { // Создание слушателя на весь итем, внутри которого наш метод с интерфейса
+               itemView.setOnClickListener {
                    listener.onClickItem(noteItem)
                }
         }
         companion object{
-            fun create(parent: ViewGroup) : NoteItemHolder{ // Выдает инициализированный класс NoteItemHolder который в себе хранит ссылку на загруженную в паять разметку
+            fun create(parent: ViewGroup) : NoteItemHolder{ 
                 return NoteItemHolder(LayoutInflater.from(parent.context).inflate(R.layout.note_list_item,parent,false))
             }
         }
@@ -50,15 +50,15 @@ class NoteAdapter( private  val listener:Listener,val pref : SharedPreferences) 
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteItemHolder {
-        return NoteItemHolder.create(parent)  // Передается наша готовая разметка в функции create
+        return NoteItemHolder.create(parent)  
     }
 
     override fun onBindViewHolder(holder: NoteItemHolder, position: Int) {
-        return holder.setData(getItem(position),listener,pref)  // Подсчет элементов, создан каждый элемент с помощью функции setData и так как это ListAdapter мы берем вместо массива, напрямую с помощью getItem, передача listener для всех элементов в массиве
+        return holder.setData(getItem(position),listener,pref)  
     }
 
-    interface Listener{ // Создаем интерфейс, чтобы передать его с адаптера в ViewModel
-        fun deleteItem(id:Int) // Передаем в параметр id, так как по нему будем удалять с базы данных
-        fun onClickItem(noteItem: NoteItem) // Метод который отвечает за нажатие на наш весь элемент
+    interface Listener{ 
+        fun deleteItem(id:Int) 
+        fun onClickItem(noteItem: NoteItem) 
     }
 }
