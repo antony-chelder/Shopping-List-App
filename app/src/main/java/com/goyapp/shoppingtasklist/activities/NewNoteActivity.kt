@@ -33,7 +33,7 @@ class NewNoteActivity : AppCompatActivity() {
     private lateinit var binding : ActivityNewNoteBinding
     private var note: NoteItem? = null
     private lateinit var defpref : SharedPreferences
-    private var pref : SharedPreferences? = null // Инстанция преференс
+    private var pref : SharedPreferences? = null 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNewNoteBinding.inflate(layoutInflater)
@@ -47,7 +47,7 @@ class NewNoteActivity : AppCompatActivity() {
         actionMenuCallback()
     }
 
-    private fun onClickColorPicker() = with(binding){ // Добавляем слушатели нажатия для наших цветов
+    private fun onClickColorPicker() = with(binding){
         imRed.setOnClickListener {
 
             setColorForSelectedText(R.color.picker_red)
@@ -60,9 +60,9 @@ class NewNoteActivity : AppCompatActivity() {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun init(){ // Инициализировали наш TouchListener и прикрепили к элементу, в данном случае к linearlayout
+    private fun init(){ 
         binding.colorPickerLayout.setOnTouchListener(MyTouchListener())
-        pref = PreferenceManager.getDefaultSharedPreferences(this) // Инициализация preference, используем default, так как получаем заполненную таблицу через специальный экран Preference, досутп к данным который выберает пользователь
+        pref = PreferenceManager.getDefaultSharedPreferences(this) 
         defpref = PreferenceManager.getDefaultSharedPreferences(this)
     }
 
@@ -76,13 +76,13 @@ class NewNoteActivity : AppCompatActivity() {
            setResult()
 
 
-        } else if(item.itemId == android.R.id.home){ // Активация кнопки home, проверка условия
+        } else if(item.itemId == android.R.id.home){ 
           finish()
-        }else if(item.itemId == R.id.bold_style){ // Слушатель для выделения текста жирным
+        }else if(item.itemId == R.id.bold_style){ 
           setBoldSelectedText()
 
         }else if(item.itemId == R.id.color_picker){
-           if(binding.colorPickerLayout.isShown){ // Проверка на нажатие,если он виден на экране,то при нажатии на ту же кнопку закроется и наоборот
+           if(binding.colorPickerLayout.isShown){ 
                closeColorPicker()
            }else{
                openColorPicker()
@@ -92,7 +92,7 @@ class NewNoteActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun getSelectedTheme() : Int{ // Функция для изменение темы в зависимости что выбрал пользователь
+    private fun getSelectedTheme() : Int{ 
         return when {
             defpref.getString("theme_key","Green") == "Green" -> {
                 R.style.Theme_NewNoteThemeGreen
@@ -107,84 +107,83 @@ class NewNoteActivity : AppCompatActivity() {
     }
 
     private fun setBoldSelectedText() = with(binding){
-        val startPos = edDesc.selectionStart // Переменная будет хранить в себе позицию откуда начинается выделение текста
-        val endPos = edDesc.selectionEnd   // Переменная будет хранить в себе позицию где заканчивается выделение текста
+        val startPos = edDesc.selectionStart 
+        val endPos = edDesc.selectionEnd  
 
 
-        val styles = edDesc.text.getSpans(startPos,endPos,StyleSpan::class.java) // Берем стили которые уже есть в выделенном отрезке текста
+        val styles = edDesc.text.getSpans(startPos,endPos,StyleSpan::class.java) 
+        var boldStyle : StyleSpan? = null 
 
-        var boldStyle : StyleSpan? = null // Инстанция нашего boldstyle для проверки какой шрифт уже на данный момент в нашем отрезке выделенного текста
-
-        if(styles.isNotEmpty()){ // Проверка, если у нас уже выбран какой то стиль для текста, тоесть notEmpty
-            edDesc.text.removeSpan(styles[0]) // Убираем этот стиль, и так как у нас он только один, это bold, тогда в наш массив стилей передаем только 1(0)
-        }else{ // Если у нас не выбран стиль
-            boldStyle = StyleSpan(Typeface.BOLD) // Присваиваем нашей инстанции bold style
+        if(styles.isNotEmpty()){ 
+            edDesc.text.removeSpan(styles[0]) 
+        }else{
+            boldStyle = StyleSpan(Typeface.BOLD)
 
         }
-        edDesc.text.setSpan(boldStyle,startPos,endPos,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) // Устанавливаем наш стиль к тексту
-        edDesc.text.trim() // trim удаляет все пробелы
-        edDesc.setSelection(startPos) // Позиция нашего курсора с начала
+        edDesc.text.setSpan(boldStyle,startPos,endPos,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) 
+        edDesc.text.trim() 
+        edDesc.setSelection(startPos) 
 
 
     }
 
-    private fun setColorForSelectedText(colorId : Int) = with(binding){ // Функция для установки цвета в выделенном тексте, передаем id цвета
-        val startPos = edDesc.selectionStart // Переменная будет хранить в себе позицию откуда начинается выделение текста
-        val endPos = edDesc.selectionEnd   // Переменная будет хранить в себе позицию где заканчивается выделение текста
+    private fun setColorForSelectedText(colorId : Int) = with(binding){ 
+        val startPos = edDesc.selectionStart
+        val endPos = edDesc.selectionEnd  
 
 
-        val styles = edDesc.text.getSpans(startPos,endPos,ForegroundColorSpan::class.java) // Берем стили с цветом которые уже есть в выделенном отрезке текста
+        val styles = edDesc.text.getSpans(startPos,endPos,ForegroundColorSpan::class.java) 
 
-        if(styles.isNotEmpty()){ // Проверка, если у нас уже выбран какой то стиль для текста, тоесть notEmpty
-            edDesc.text.removeSpan(styles[0]) // Убираем этот стиль, и так как у нас он только один, это bold, тогда в наш массив стилей передаем только 1(0)
+        if(styles.isNotEmpty()){
+            edDesc.text.removeSpan(styles[0]) 
         }
-        edDesc.text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this@NewNoteActivity,colorId)),startPos,endPos,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) // Устанавливаем наш стиль и цвет к тексту, переадем в параметрах наш colorid который будет выбирать пользователь
-        edDesc.text.trim() // trim удаляет все пробелы
-        edDesc.setSelection(startPos) // Позиция нашего курсора с начала
+        edDesc.text.setSpan(ForegroundColorSpan(ContextCompat.getColor(this@NewNoteActivity,colorId)),startPos,endPos,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) 
+        edDesc.text.trim() 
+        edDesc.setSelection(startPos) 
 
 
     }
 
     private fun getNote(){
-        val sNote = intent.getSerializableExtra(NoteFragment.NEW_NOTE_KEY) // Делаем инстанцию нашего сериализейбл, так как мы не можем передать null как NoteItem
+        val sNote = intent.getSerializableExtra(NoteFragment.NEW_NOTE_KEY) 
         if(sNote != null) {
             note = sNote as NoteItem
-            fillNote() // Запускаем функцию нашей проверка
+            fillNote()
         }
 
 
     }
 
-    private fun fillNote() = with(binding){ // Функция для заполнения наших полей, если приходит не null
-            edTitle.setText(note?.title) // Установка текста с заметки которая приходит
-            edDesc.setText(HtmlManager.getFromHtml(note?.desc_content!!).trim()) // Превращаем из Html в Spannable, чтобы приенилось для нашего EditText все стили,цвета с сохранением в базу данных
+    private fun fillNote() = with(binding){
+            edTitle.setText(note?.title) 
+            edDesc.setText(HtmlManager.getFromHtml(note?.desc_content!!).trim()) 
     }
 
     private fun setResult(){
-        var editstate = "new" // Создали переменную для проверки, мы будем передавать новосозданную заметку или обновленную, по умолчанию new
+        var editstate = "new" 
         val tempNote: NoteItem? = if(note == null) {
-            createNewNote()  // Если у нас данные note пустые, то создаем нашу заметку впервые через Insert
+            createNewNote() 
 
         }else {
             editstate = "update"
-            updateNote() // Если у нас данные были заполнены до этого, то при нажатии на сохранить, обновится ранее созданная заметка с обновленными данными
+            updateNote() 
 
         }
 
         val i = Intent().apply {
-            putExtra(NoteFragment.NEW_NOTE_KEY,tempNote) // Передаем подготовленные данные на наш фрагмент
-            putExtra(NoteFragment.UPDATE_NOTE_KEY,editstate) // Передаем данные по ключу для проверки что мы делаем обновляем или создаем новое
+            putExtra(NoteFragment.NEW_NOTE_KEY,tempNote) 
+            putExtra(NoteFragment.UPDATE_NOTE_KEY,editstate) 
         }
 
-        setResult(RESULT_OK,i)          // Проверка на результат который прийдет при нажатии на кнопку Save
+        setResult(RESULT_OK,i)          
         finish()
     }
 
     private fun updateNote() : NoteItem? = with(binding){
-       return note?.copy(title = edTitle.text.toString(), desc_content = HtmlManager.toHtml(edDesc.text) ) // Благодаря copy обновляем то что у нас было в заметке, и остается наша заметка без изменений, только перезаписывается, также для content используем функцию для превращение в Html
+       return note?.copy(title = edTitle.text.toString(), desc_content = HtmlManager.toHtml(edDesc.text))
     }
 
-    private fun createNewNote() : NoteItem{ // Заполняем каждый из заметок,нащим готовым классом NoteItem данными из заметок
+    private fun createNewNote() : NoteItem{
         return NoteItem(null,binding.edTitle.text.toString(),HtmlManager.toHtml(binding.edDesc.text) ,TimeManager.getCurrentTime(),"")
 
     }
@@ -193,28 +192,28 @@ class NewNoteActivity : AppCompatActivity() {
 
 
 
-    private fun actionBarSettings(){ // Создали как настройки action bar, где активируем кнопку домой
+    private fun actionBarSettings(){ 
         val ab = supportActionBar
         ab?.setDisplayHomeAsUpEnabled(true)
     }
 
-    private fun openColorPicker(){ // Функция для открытия colorpicker
-        binding.colorPickerLayout.visibility = View.VISIBLE // Делаем наш layout видимым
-        val openAnim = AnimationUtils.loadAnimation(this,R.anim.open_color_picker) // Загрузка созданной анимации
-        binding.colorPickerLayout.startAnimation(openAnim) // Запуск анимации к layout
+    private fun openColorPicker(){ 
+        binding.colorPickerLayout.visibility = View.VISIBLE
+        val openAnim = AnimationUtils.loadAnimation(this,R.anim.open_color_picker)
+        binding.colorPickerLayout.startAnimation(openAnim) 
         
 
     }
 
     private fun closeColorPicker(){ // Функция для закрытия colorpicker
-        val openAnim = AnimationUtils.loadAnimation(this,R.anim.close_color_picker) // Загрузка созданной анимации
-        openAnim.setAnimationListener(object : Animation.AnimationListener{ // Делаем слушатель,который отслеживает состояние анимации
+        val openAnim = AnimationUtils.loadAnimation(this,R.anim.close_color_picker)
+        openAnim.setAnimationListener(object : Animation.AnimationListener{
             override fun onAnimationStart(anim: Animation?) {
 
             }
 
             override fun onAnimationEnd(anim: Animation?) {
-                binding.colorPickerLayout.visibility = View.GONE //Делаем невидимым наш layout когда анимация заканчивается
+                binding.colorPickerLayout.visibility = View.GONE 
             }
 
             override fun onAnimationRepeat(anim: Animation?) {
@@ -226,15 +225,15 @@ class NewNoteActivity : AppCompatActivity() {
 
 
     }
-    private fun actionMenuCallback(){ // Функция для удаления меню при выделении текста
-        val actionmenucallback = object : ActionMode.Callback{ // Создаем колбэк для того чтобы работать с этим меню
+    private fun actionMenuCallback(){ 
+        val actionmenucallback = object : ActionMode.Callback{ 
             override fun onCreateActionMode(p0: ActionMode?, menu: Menu?): Boolean {
-                menu?.clear() // Как только меню постарается нарисоватся, то его сразу стираем
+                menu?.clear() 
                 return true
             }
 
             override fun onPrepareActionMode(p0: ActionMode?, menu: Menu?): Boolean {
-                menu?.clear() // Как только меню постарается нарисоватся, то его сразу стираем
+                menu?.clear() 
                 return true
             }
 
@@ -247,17 +246,16 @@ class NewNoteActivity : AppCompatActivity() {
             }
 
         }
-        binding.edDesc.customSelectionActionModeCallback = actionmenucallback  // Callback который следит за выделениями в edText и переадем наш созданный коллбэк
+        binding.edDesc.customSelectionActionModeCallback = actionmenucallback 
     }
 
 
     private fun setTextSize() = with(binding){
-        edTitle.setTextSize(pref?.getString("text_title_size","16")) // Использвание нашей Extension функции в которой берутся значения с pref по ключу
-        edDesc.setTextSize(pref?.getString("text_content_size","14")) // Использвание нашей Extension функции в которой берутся значения с pref по ключу
+        edTitle.setTextSize(pref?.getString("text_title_size","16")) 
+        edDesc.setTextSize(pref?.getString("text_content_size","14"))
 
     }
 
-    private fun EditText.setTextSize( size : String?){ // Extension функция благодаря которой добавляем к нашему Editext свою функцию которая будет изменять размер текста
-        if(size != null) this.textSize = size.toFloat() // Указываем this, к какому EditText будет применятся, и передаем в textsize размер который передадим, превращаем в Float, так как размер устанавливается в этом типе даннных
-    }
+    private fun EditText.setTextSize( size : String?){ 
+        if(size != null) this.textSize = size.toFloat() 
 }
