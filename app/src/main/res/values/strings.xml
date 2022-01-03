@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">ShoppingTaskList</string>
+    <string name="setting_name">Settings</string>
+    <string name="notes_name">Notes</string>
+    <string name="shop_list">ShopList</string>
+    <string name="new_item">New</string>
+    <string name="title_hint">Title</string>
+    <string name="desc_hint">Description</string>
+    <string name="new_list_name">New list name</string>
+    <string name="update_text_button">Update List</string>
+    <string name="create_text_button">Create List</string>
+    <string name="general_name">General</string>
+    <string name="choosenote_style_name">Choose note style</string>
+    <string name="time_style_name">Pick time format</string>
+    <string name="remove_ads">Remove Ads</string>
+    <string name="remove_ads_summary">Remove all Ads from Ads</string>
+    <string name="theme_settings">Choose Theme</string>
+    <string name="text_size_title_settings">Choose Title Text size</string>
+    <string name="text_size_content_settings">Choose Content Text size</string>
+
+
+    <string name="ask_delete">Do u want delete this item?</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
