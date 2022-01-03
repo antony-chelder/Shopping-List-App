@@ -6,26 +6,26 @@ import com.goyapp.shoppingtasklist.entities.ShopListName
 import java.lang.StringBuilder
 
 object ShareHelper {
-    fun shareShopList(shopList : List<ShopListItem>,listName : String) : Intent{ // Функция которая будет запускатся, когда хотим поделится переданным списком покупок в другом приложении, возвращать будет Intent, чтобы запустилось окошко с выбором приложения
-        val intent = Intent(Intent.ACTION_SEND) // Выбераем из констант что мы будем делать
-        intent.type = "text/plane" // Тип текст
-        intent.apply { //Помещаем в intent сформированные данные
-            putExtra(Intent.EXTRA_TEXT, makeShareText(shopList,listName)) // Передача в виде текста
+    fun shareShopList(shopList : List<ShopListItem>,listName : String) : Intent{ 
+        val intent = Intent(Intent.ACTION_SEND) 
+        intent.type = "text/plane" 
+        intent.apply { 
+            putExtra(Intent.EXTRA_TEXT, makeShareText(shopList,listName)) 
 
         }
         return intent
 
     }
 
-    private fun makeShareText(shopList : List<ShopListItem>,listName : String) : String{ // Функция,чтобы сделать текст красивым, не в одну строку
-        val sBuilder = StringBuilder() // Стрингбилдер, чтобы оформлять и создавать шаблон текста
-        sBuilder.append("<<$listName>>") // Название списка
-        sBuilder.append("\n") // Перейти на следущую строку
-        var counter = 0 // Чтобы записывать сколько элементов будет
+    private fun makeShareText(shopList : List<ShopListItem>,listName : String) : String{ 
+        val sBuilder = StringBuilder() 
+        sBuilder.append("<<$listName>>") 
+        sBuilder.append("\n") 
+        var counter = 0 
 
       shopList.forEach {
-         sBuilder.append("${++counter} - ${it.name} (${it.item_info})") // Установка нумерации, название списка и дополнительная инофрмация
-          sBuilder.append("\n") // Перейти на следущую строку
+         sBuilder.append("${++counter} - ${it.name} (${it.item_info})") 
+          sBuilder.append("\n") 
 
 
       }
