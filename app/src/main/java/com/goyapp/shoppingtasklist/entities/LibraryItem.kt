@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 
 @Entity(tableName = "library")
-data class LibraryItem(  // Класс будет хранит все те элементы которые человек ввел(подсказки) благодаря библиотеки
+data class LibraryItem(  
     @PrimaryKey(autoGenerate = true)
     val id : Int?,
 
