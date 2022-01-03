@@ -8,11 +8,11 @@ import com.goyapp.shoppingtasklist.databinding.NewListDialogBinding
 
 object DeleteDialog {
     fun showdialog(context: Context,listener:Listener){
-        var dialog : AlertDialog? = null  // Создали инстанцию диалога
-        val builder = AlertDialog.Builder(context) // Создан билдер
-        val binding = DeleteDialogBinding.inflate(LayoutInflater.from(context)) // Инициализировали binding класс где находится разметка диалога
+        var dialog : AlertDialog? = null  
+        val builder = AlertDialog.Builder(context) 
+        val binding = DeleteDialogBinding.inflate(LayoutInflater.from(context)) 
 
-        builder.setView(binding.root) // Подключение разметки к билдеру
+        builder.setView(binding.root) 
 
         binding.apply {
             bDelete.setOnClickListener {
@@ -26,12 +26,12 @@ object DeleteDialog {
             }
 
         }
-        dialog = builder.create() // Создали диалог
-        dialog.window?.setBackgroundDrawable(null) // Убираем ненужный фон помимо нашего
-        dialog.show() // Показываем диалог
+        dialog = builder.create() 
+        dialog.window?.setBackgroundDrawable(null) 
+        dialog.show() 
 
     }
-    interface Listener{ // Создание интерфейса, чтобы передать сохраненное название листа на Activity
+    interface Listener{ 
         fun onClick()
 
     }
