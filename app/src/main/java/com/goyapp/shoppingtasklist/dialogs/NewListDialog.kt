@@ -8,39 +8,38 @@ import com.goyapp.shoppingtasklist.databinding.NewListDialogBinding
 
 object NewListDialog {
     fun showdialog(context: Context,listener:Listener,name: String){
-        var dialog : AlertDialog? = null  // Создали инстанцию диалога
-        val builder = AlertDialog.Builder(context) // Создан билдер
-        val binding = NewListDialogBinding.inflate(LayoutInflater.from(context)) // Инициализировали binding класс где находится разметка диалога
+        var dialog : AlertDialog? = null  
+        val builder = AlertDialog.Builder(context) 
+        val binding = NewListDialogBinding.inflate(LayoutInflater.from(context)) 
 
-        builder.setView(binding.root) // Подключение разметки к билдеру
+        builder.setView(binding.root) 
 
 
 
         binding.apply {
             if(name.isNotEmpty()){
-//               button.text = context.getString(R.string.update_text_button) // Устанавливаем новый текст для кнопки если мы редактируем
                 button.setText(R.string.update_text_button)
             }
-            ednewListName.setText(name) // Передаем название заметки во время редактирования, если новая, то будет пустота
+            ednewListName.setText(name)
             button.setOnClickListener {
                 val listname = ednewListName.text.toString()
 
-                if(listname.isEmpty()){ // Проверка заполнил ли пользователь название списка
+                if(listname.isEmpty()){ 
                     dialog?.dismiss()
 
                 }else{
-                  listener.onClick(listname) // Если не пусто, то сохраняем данные и едит текста и передаем на Activity
+                  listener.onClick(listname) 
                     dialog?.dismiss()
                 }
 
             }
         }
-        dialog = builder.create() // Создали диалог
-        dialog.window?.setBackgroundDrawable(null) // Убираем ненужный фон помимо нашего
-        dialog.show() // Показываем диалог
+        dialog = builder.create() 
+        dialog.window?.setBackgroundDrawable(null) 
+        dialog.show() 
 
     }
-    interface Listener{ // Создание интерфейса, чтобы передать сохраненное название листа на Activity
+    interface Listener{ 
         fun onClick(name:String)
 
     }
