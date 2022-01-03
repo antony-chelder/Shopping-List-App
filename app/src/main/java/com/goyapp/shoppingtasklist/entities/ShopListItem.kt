@@ -14,19 +14,19 @@ data class ShopListItem(
     val name :String,
 
     @ColumnInfo(name = "item_info")
-    val item_info :String = "",  // Равно null, на случай, если пользователь не хочет вносить дополнительной инфы
+    val item_info :String = "",  
 
 
     @ColumnInfo(name = "item_bought")
-    val item_bought :Boolean = false, // Равно 0, потому что изначально значение не будет выбрано, что item куплен
+    val item_bought :Boolean = false, 
 
-    @ColumnInfo(name = "list_id") // Индефикатор нашего списка к кторому принадлежит данный элемент
+    @ColumnInfo(name = "list_id") 
     val list_id :Int,
 
 
 
     @ColumnInfo(name = "item_type")
-    val item_type :Int = 0  // ! Проверка если это то что выбрал пользователь
+    val item_type :Int = 0  
 
 
 )
