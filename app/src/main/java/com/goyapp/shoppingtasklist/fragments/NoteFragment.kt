@@ -26,21 +26,17 @@ import com.goyapp.shoppingtasklist.entities.NoteItem
 class NoteFragment : BaseFragment(),NoteAdapter.Listener {
     private lateinit var binding:FragmentNoteBinding
     private lateinit var pref : SharedPreferences
-    lateinit var adapter : NoteAdapter // Инстанция адаптера
-    private lateinit var activeLaunch : ActivityResultLauncher<Intent> // Создали инстанцию ActivityLauncher
-    private  val mainViewModel: MainViewModel by activityViewModels{ // Инициализируем ViewModel в фрагменте
-        MainViewModel.MainViewModelFactory((context?.applicationContext as MainApp).database) // Передача базы данных с помощью класса всего приложения MainApp где и запускается наш db на уровне всего приложения
+    lateinit var adapter : NoteAdapter 
+    private lateinit var activeLaunch : ActivityResultLauncher<Intent> 
+    private  val mainViewModel: MainViewModel by activityViewModels{ 
+        MainViewModel.MainViewModelFactory((context?.applicationContext as MainApp).database)
     }
-    override fun onClickNewFrag() { // В зависимости какой фрагмент вызывается, будет запускатся это функция
-        activeLaunch.launch(Intent(activity,NewNoteActivity::class.java)) // Запускаем Intent с помощью launcher и ждем результата
+    override fun onClickNewFrag() { 
+        activeLaunch.launch(Intent(activity,NewNoteActivity::class.java)) 
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-      //  mainViewModel.allNotes.observe(this,{ // Эта функция запускается если есть какие то обновления в списке со всем записями, выдает каждый раз обновленный список когда View доступен
-
-
-      //  })
         onEditResult()
     }
 
@@ -52,14 +48,14 @@ class NoteFragment : BaseFragment(),NoteAdapter.Listener {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) { // Эта функция запускается когда уже все View созданы
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) { 
         super.onViewCreated(view, savedInstanceState)
-        initRcView() // Передаем наш готовый адаптер только в том случае когда уже все View созданы, иначе не будет работать
+        initRcView() 
         observer()
     }
 
     private fun observer(){
-        mainViewModel.allNotes.observe(viewLifecycleOwner,{ // Благодаря viewmodel и observer следим за изменением в списке, viewLifecycleOwner потому что находимся в Fragment
+        mainViewModel.allNotes.observe(viewLifecycleOwner,{ 
             adapter.submitList(it)
 
         })
@@ -68,26 +64,26 @@ class NoteFragment : BaseFragment(),NoteAdapter.Listener {
 
     private fun initRcView() = with(binding){
         pref = PreferenceManager.getDefaultSharedPreferences(activity)
-        rcViewNote.layoutManager = checkLayoutView()   // Расположение элементов в списке
-        adapter = NoteAdapter(this@NoteFragment,pref) // Инициализировали адаптер,передача listener именно нашего фрагмента, также sharedpreference для того чтобы брать данные
-        rcViewNote.adapter = adapter  // Указали какой какой адаптер будет обновлять наш список
+        rcViewNote.layoutManager = checkLayoutView()   
+        adapter = NoteAdapter(this@NoteFragment,pref) 
+        rcViewNote.adapter = adapter  
 
     }
 
-    private fun  checkLayoutView() : RecyclerView.LayoutManager{ // Функция для проверки какой вид положения элементов в списке
-        return if(pref.getString("note_style_key","Linear") == "Linear"){ // Проверка на какой вид сохранен в памяти
+    private fun  checkLayoutView() : RecyclerView.LayoutManager{ 
+        return if(pref.getString("note_style_key","Linear") == "Linear"){ 
             LinearLayoutManager(activity)
         }else {
-            StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL) // Специяальный layout который занимает адаптивный размер и подстраивает элементы в списке
+            StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL) 
         }
     }
 
     private fun onEditResult(){
-        activeLaunch = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ // Регистрируем наш activity launcher где будет приходить данные с запущенного Activity, если они есть
+        activeLaunch = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ 
             if(it.resultCode == Activity.RESULT_OK){
                 val edistate = it.data?.getStringExtra(UPDATE_NOTE_KEY)
                 if(edistate== "new") {
-                    mainViewModel.InsertNote(it.data?.getSerializableExtra(NEW_NOTE_KEY) as NoteItem) // Получаем в виде байтов, чтобы передавать данные целым классом
+                    mainViewModel.InsertNote(it.data?.getSerializableExtra(NEW_NOTE_KEY) as NoteItem) 
                 }else{
                     mainViewModel.UpdateNote(it.data?.getSerializableExtra(NEW_NOTE_KEY) as NoteItem)
                 }
@@ -96,7 +92,7 @@ class NoteFragment : BaseFragment(),NoteAdapter.Listener {
         }
     }
 
-    companion object { // Чтобы у нас была только 1 инстанция фрагмента, singleton
+    companion object {
         const val NEW_NOTE_KEY = "note_key"
         const val UPDATE_NOTE_KEY = "update_note_key"
         @JvmStatic
@@ -108,8 +104,8 @@ class NoteFragment : BaseFragment(),NoteAdapter.Listener {
     }
 
     override fun onClickItem(noteItem: NoteItem) {
-        val i = Intent(activity,NewNoteActivity::class.java).apply { // Передаем уже заполненные раннее данные на экран где создаем заметку(NewNoteActivity), чтобы обновить
-            putExtra(NEW_NOTE_KEY,noteItem) // Передали наш весь класс NoteItem
+        val i = Intent(activity,NewNoteActivity::class.java).apply { 
+            putExtra(NEW_NOTE_KEY,noteItem) 
         }
         activeLaunch.launch(i)
     }
