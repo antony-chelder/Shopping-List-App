@@ -8,34 +8,34 @@ import com.goyapp.shoppingtasklist.entities.ShopListName
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
-class MainViewModel(database: MainDatabase) : ViewModel() { // Создали ViewModel который будет последником между view и model
-    val dao = database.getDao() // Инстанция интерфейса где происходит считывание, запись, удаление,обновление в базе данных
-    val libraryItems = MutableLiveData<List<LibraryItem>>() // Создание списка из списков библиотеки, livedata следит за обновлениями
-    val allNotes : LiveData<List<NoteItem>> = dao.getAllNotes().asLiveData()   // Когда у нас будет что то менятся в списке, то оно будет автоматически обновляться с помощью LiveData, прослушиваем изменение
-    val allShopListName : LiveData<List<ShopListName>> = dao.getAllShopListName().asLiveData()   // Когда у нас будет что то менятся в списке, то оно будет автоматически обновляться с помощью LiveData, прослушиваем изменение
+class MainViewModel(database: MainDatabase) : ViewModel() { 
+    val dao = database.getDao() 
+    val libraryItems = MutableLiveData<List<LibraryItem>>() 
+    val allNotes : LiveData<List<NoteItem>> = dao.getAllNotes().asLiveData()   
+    val allShopListName : LiveData<List<ShopListName>> = dao.getAllShopListName().asLiveData()  
 
-    fun getAllItemsFromList(listid: Int) : LiveData<List<ShopListItem>>{ // Делаем функцию, чтобы слежение за обновлениями было корректным и отсортированым, по точным list id к которому относится item,
+    fun getAllItemsFromList(listid: Int) : LiveData<List<ShopListItem>>{ 
       return dao.getAllShopListItem(listid).asLiveData()
     }
 
-    fun getAllLibraryItems(name: String) = viewModelScope.launch{ // Делаем функцию, чтобы слежение за обновлениями было корректным и отсортированым, по точным list id к которому относится item,
-         libraryItems.postValue(dao.getAllLibrayItems(name)) // Передача в observer список libraryitems из базы данных, через который будут обновлятся данные
+    fun getAllLibraryItems(name: String) = viewModelScope.launch{ 
+         libraryItems.postValue(dao.getAllLibrayItems(name)) 
     }
 
 
 
-    fun InsertNote(noteItem: NoteItem) = viewModelScope.launch { //Запуск функции на второстепенном потоке, так как это трудоемкая операция
+    fun InsertNote(noteItem: NoteItem) = viewModelScope.launch { 
         dao.insertNote(noteItem)
     }
 
-    fun DeleteNote(id: Int) = viewModelScope.launch { //Запуск функции на второстепенном потоке, так как это трудоемкая операция
+    fun DeleteNote(id: Int) = viewModelScope.launch { 
         dao.DeleteNote(id)
     }
 
-    fun DeleteLibraryItem(id: Int) = viewModelScope.launch { //Запуск функции на второстепенном потоке, так как это трудоемкая операция
+    fun DeleteLibraryItem(id: Int) = viewModelScope.launch { 
         dao.DeleteLibItem(id)
     }
-    fun DeleteShopList(id: Int,deleteList : Boolean) = viewModelScope.launch { //Запуск функции на второстепенном потоке, так как это трудоемкая операция, удаление с проверкой, если удаляем только внутри списка элементы или весь список
+    fun DeleteShopList(id: Int,deleteList : Boolean) = viewModelScope.launch { 
         if(deleteList)dao.DeleteListName(id)
         dao.deleteShopItemsById(id)
     }
@@ -58,21 +58,21 @@ class MainViewModel(database: MainDatabase) : ViewModel() { // Создали Vi
 
     fun InsertShopListItem(shopListItem: ShopListItem) = viewModelScope.launch {
         dao.InsertItem(shopListItem)
-        if(!isLibraryItemExist(shopListItem.name)) dao.InsertLibraryItem(LibraryItem(null,shopListItem.name)) // Если нет элементов записанных ранее такого же имени, тогда добавляем
+        if(!isLibraryItemExist(shopListItem.name)) dao.InsertLibraryItem(LibraryItem(null,shopListItem.name)) 
     }
 
     fun UpdateShopListItem(shopListItem: ShopListItem) = viewModelScope.launch {
         dao.updateListItem(shopListItem)
     }
 
-     private suspend fun isLibraryItemExist(name :String) : Boolean{ // Функция которая будет сверять есть ли уже такое название item в библиотеке
-        return dao.getAllLibrayItems(name).isNotEmpty() // Если в библиотеке что то есть выдает true, усли не то false
+     private suspend fun isLibraryItemExist(name :String) : Boolean{ 
+        return dao.getAllLibrayItems(name).isNotEmpty() 
     }
 
 
-    class MainViewModelFactory( val database: MainDatabase) : ViewModelProvider.Factory{ // Этот класс инициализирует наш MainViewModel, нужно делать так постоянно следуя документации
+    class MainViewModelFactory( val database: MainDatabase) : ViewModelProvider.Factory{ 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if(modelClass.isAssignableFrom(MainViewModel::class.java)){ // Проверка на наш ViewModel
+            if(modelClass.isAssignableFrom(MainViewModel::class.java)){ 
                 @Suppress("UNCHECKED_CAST")
                 return MainViewModel(database) as T
 
