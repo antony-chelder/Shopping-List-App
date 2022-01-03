@@ -23,16 +23,16 @@ class ShopListNamesFragment : BaseFragment(),ShopListNameAdapter.Listener {
     private lateinit var binding : FragmentShopListNamesBinding
     private  lateinit var adapter : ShopListNameAdapter
 
-    private  val mainViewModel: MainViewModel by activityViewModels{ // Инициализируем ViewModel в фрагменте
-        MainViewModel.MainViewModelFactory((context?.applicationContext as MainApp).database) // Передача базы данных с помощью класса всего приложения MainApp где и запускается наш db на уровне всего приложения
+    private  val mainViewModel: MainViewModel by activityViewModels{ 
+        MainViewModel.MainViewModelFactory((context?.applicationContext as MainApp).database) 
     }
     override fun onClickNewFrag() {
        NewListDialog.showdialog(activity as AppCompatActivity, object : NewListDialog.Listener{
-           override fun onClick(name: String) { // При нажатии на кнопку сохранить добавится новый список
-            val shoplistname = ShopListName( // Заполняем данные, с помощью класса
+           override fun onClick(name: String) { 
+            val shoplistname = ShopListName( 
                 null,name, TimeManager.getCurrentTime(),0,0,""
             )
-               mainViewModel.InsertShopListName(shoplistname) // Делаем insert в базу данных нашего заполненого класса
+               mainViewModel.InsertShopListName(shoplistname) /
            }
 
        }, "")
@@ -45,7 +45,7 @@ class ShopListNamesFragment : BaseFragment(),ShopListNameAdapter.Listener {
     }
 
     private fun observer(){
-        mainViewModel.allShopListName.observe(viewLifecycleOwner,{ // Благодаря viewmodel и observer следим за изменением в списке, viewLifecycleOwner потому что находимся в Fragment
+        mainViewModel.allShopListName.observe(viewLifecycleOwner,{ 
             adapter.submitList(it)
 
 
@@ -90,20 +90,20 @@ class ShopListNamesFragment : BaseFragment(),ShopListNameAdapter.Listener {
         })
     }
 
-    override fun editItem(shopListName: ShopListName) { // Функция для обновления названия заметки
+    override fun editItem(shopListName: ShopListName) { 
         NewListDialog.showdialog(activity as AppCompatActivity, object : NewListDialog.Listener{
-            override fun onClick(name: String) { // При нажатии на кнопку сохранить добавится новый список
+            override fun onClick(name: String) { 
 
-                mainViewModel.UpdateListName(shopListName.copy(name = name)) // Делаем обновление, при этом оставляя все прошлые данные, только изменяя имя
+                mainViewModel.UpdateListName(shopListName.copy(name = name)) 
             }
 
-        },shopListName.name) // Передали текущее название list в edit при редаетировании
+        },shopListName.name) 
     }
 
     override fun onClickItem(shopListName: ShopListName) {
 
         val i = Intent(activity,ShopListActivity::class.java).apply {
-            putExtra(ShopListActivity.SHOP_LIST_NAME_KEY,shopListName) // Передаем весь наш ShoplistName
+            putExtra(ShopListActivity.SHOP_LIST_NAME_KEY,shopListName) 
         }
         startActivity(i)
     }
