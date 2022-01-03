@@ -14,7 +14,7 @@ class SettingsActivity : AppCompatActivity() {
         init()
         setTheme(getSelectedTheme())
         setContentView(R.layout.activity_settings)
-        if(savedInstanceState == null){ // Проверка создан ли наш Фрагмент до этого или нет, если да, то запускаем его
+        if(savedInstanceState == null){ 
             supportFragmentManager.beginTransaction().replace(R.id.placeholder,SettingsFragment()).commit()
 
 
@@ -32,7 +32,7 @@ class SettingsActivity : AppCompatActivity() {
         pref = PreferenceManager.getDefaultSharedPreferences(this)
     }
 
-    private fun getSelectedTheme() : Int{ // Функция для изменение темы в зависимости что выбрал пользователь
+    private fun getSelectedTheme() : Int{ 
         return when {
             pref.getString("theme_key","Green") == "Green" -> {
                 R.style.Theme_ShoppingThemeGreen
