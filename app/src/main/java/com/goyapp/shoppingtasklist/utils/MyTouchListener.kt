@@ -3,19 +3,19 @@ package com.goyapp.shoppingtasklist.utils
 import android.view.MotionEvent
 import android.view.View
 
-class MyTouchListener : View.OnTouchListener { // Создаем наш TouchListener для того чтобы взаимодейстовать с элементов, перетаскивать по экрану к примеру
-    var xDelta  = 0.0f //Переменные оси по которым мы двигем
+class MyTouchListener : View.OnTouchListener { 
+    var xDelta  = 0.0f 
     var yDelta  = 0.0f
     override fun onTouch(view: View, event: MotionEvent?): Boolean {
-        when(event?.action){ // Проверка на какое действие выполняется с элементов, отпустили его,удерживаем
-            MotionEvent.ACTION_DOWN->{// // Запускается каждый раз как мы отпускаем обьект
+        when(event?.action){ 
+            MotionEvent.ACTION_DOWN->{
 
-                 xDelta = view.x - event.rawX // Узнаем куда мы подвинули, настоящая позиция где был элемент минус куда мы двигаем
-                 yDelta = view.y - event.rawY // Узнаем куда мы подвинули, настоящая позиция где был элемент минус куда мы двигаем
+                 xDelta = view.x - event.rawX 
+                 yDelta = view.y - event.rawY 
             }
 
-            MotionEvent.ACTION_MOVE->{ // Запускается каждый раз как мы двигаем элемента,слушатель движения
-                view.x = xDelta + event.rawX // Показывает текущее движение элемента
+            MotionEvent.ACTION_MOVE->{ 
+                view.x = xDelta + event.rawX 
                 view.y = yDelta + event.rawY
 
 
