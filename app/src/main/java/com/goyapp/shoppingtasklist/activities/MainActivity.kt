@@ -17,20 +17,20 @@ import com.goyapp.shoppingtasklist.settings.SettingsActivity
 class MainActivity : AppCompatActivity(),NewListDialog.Listener {
     private lateinit var binding : ActivityMainBinding
     private lateinit var pref : SharedPreferences
-    private var currentTheme = "" // Переменная с текущей темой, чтобы отслеживать обновление и установку текущей темы
-    private var currentMenuItemId = R.id.shop_list // Инстанция переменной через которую будет проверка и корректное обновление menuItem на котором находился пользователь так как мы используем два врагмента на одном активити
+    private var currentTheme = "" 
+    private var currentMenuItemId = R.id.shop_list 
     override fun onCreate(savedInstanceState: Bundle?) {
         init()
         setTheme(getSelectedTheme())
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        FragmentManager.setFragment(ShopListNamesFragment.newInstance(),this) // Запускаем как первый Fragment
+        FragmentManager.setFragment(ShopListNamesFragment.newInstance(),this) 
         setButtonNavListener()
 
     }
 
-    private fun getSelectedTheme() : Int{ // Функция для изменение темы в зависимости что выбрал пользователь
+    private fun getSelectedTheme() : Int{ 
         return when {
             pref.getString("theme_key","Green") == "Green" -> {
                 R.style.Theme_ShoppingThemeGreen
@@ -47,21 +47,21 @@ class MainActivity : AppCompatActivity(),NewListDialog.Listener {
 
     private fun init(){
         pref = PreferenceManager.getDefaultSharedPreferences(this)
-        currentTheme = pref.getString("theme_key","Green").toString() // Указываем значение по умолчанию, для проверки когда пересоздавать с новой темой
+        currentTheme = pref.getString("theme_key","Green").toString() 
     }
 
-    private fun setButtonNavListener(){ // Создали слушатель нажатий на item в нашем ButtonNavMenu
+    private fun setButtonNavListener(){ 
         binding.bnav.setOnItemSelectedListener {
-            when(it.itemId){ // Прогоняем через when на какой из item было нажатие
+            when(it.itemId){ 
                 R.id.settings->{
                     startActivity(Intent(this,SettingsActivity::class.java))
                 }
                 R.id.notes->{
-                    FragmentManager.setFragment(NoteFragment.newInstance(),this) // Запуск определенного фрагмента для Note
+                    FragmentManager.setFragment(NoteFragment.newInstance(),this) 
                     currentMenuItemId = R.id.notes
                 }
                 R.id.shop_list->{
-                    FragmentManager.setFragment(ShopListNamesFragment.newInstance(),this) // Запуск определенного фрагмента для ShopListNames
+                    FragmentManager.setFragment(ShopListNamesFragment.newInstance(),this) 
                     currentMenuItemId = R.id.shop_list
                 }
                 R.id.new_item->{
@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(),NewListDialog.Listener {
 
     override fun onResume() {
         super.onResume()
-        binding.bnav.selectedItemId = currentMenuItemId // Когда возвращаемся к примеру с настроек будет сохранена информация на каком menuItem находился пользователь
+        binding.bnav.selectedItemId = currentMenuItemId 
         if(pref.getString("theme_key","Green") != currentTheme) recreate()
     }
 
