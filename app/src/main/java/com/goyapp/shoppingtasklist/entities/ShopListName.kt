@@ -5,12 +5,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
-@Entity(tableName = "shopping_list_names")   // Указали что это модель и сама таблица для создания базы данных
+@Entity(tableName = "shopping_list_names")   
 data class ShopListName(
-    @PrimaryKey(autoGenerate = true)  // Указали автогенерацию для id
-    val id : Int?, // Ставим знак вопроса, указывая что переменная null, чтобы автогенерация сработала
+    @PrimaryKey(autoGenerate = true)  
+    val id : Int?, 
 
-    @ColumnInfo(name = "name") // Создание колонны на основе переменной которая создается ниже
+    @ColumnInfo(name = "name") 
     val name : String,
 
     @ColumnInfo(name = "time")
@@ -24,8 +24,8 @@ data class ShopListName(
 
 
     @ColumnInfo(name = "items_id")
-    val  items_id : String,   // Индификаторы внутри самого списка
+    val  items_id : String,   
 
 
 
-): Serializable  // Чтобы передавать как целый класс
+): Serializable  
